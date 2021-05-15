@@ -1,0 +1,247 @@
+---
+title: "Analise Iris"
+author: "Danilo Sanches"
+date: "14/05/2021"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+# Lendo o banco de dados e verificando a estrutura.
+Como o dataset Iris já é padrão do R, não é preciso a importação.
+
+```{r}
+str(iris)
+```
+# Visualização inicial dos dados
+
+Verificando as primeiras linhas do banco de dados.
+```{r}
+head(iris)
+```
+
+Verificando as primeiras linhas de cada espécia de flor:
+```{r}
+subset(iris, Species == "setosa")[1:10,]
+```
+
+```{r}
+subset(iris, Species == "versicolor")[1:10,]
+```
+
+
+```{r}
+subset(iris, Species == "virginica")[1:10,]
+```
+
+
+# 2.Análise Exploratoria de Dados
+
+## 2.1 Estatística básicas
+
+Estatística básica de cada variável.
+
+Espécia: **SETOSA**
+```{r}
+summary(iris[iris$Species=="setosa",])
+```
+
+
+Espécia: **VERSICOLOR**
+```{r}
+summary(iris[iris$Species=="versicolor",])
+```
+
+Espécia: **VIRGINICA**
+```{r}
+summary(iris[iris$Species=="virginica",])
+```
+
+
+```{r}
+for(tipos in levels(iris$Species)) print(summary(iris[iris$Species == tipos,]))
+```
+
+
+## 2.2 Visualização da  distribuição das variáveis
+```{r}
+hist(iris$Petal.Length,
+     main="Distribuição do comprimento das Pétalas",
+     xlab = "Comprimento das Pétalas",
+     ylab = "Frequência Absoluta")
+```
+
+
+```{r}
+hist(iris$Petal.Width,
+     main="Distribuição da largura das Pétalas",
+     xlab = "Largura das Pétalas",
+     ylab = "Frequência Absoluta")
+```
+
+
+```{r}
+hist(iris$Sepal.Length,
+     main="Distribuição do comprimento das Sépalas",
+     xlab = "Comprimento das Sépalas",
+     ylab = "Frequência Absoluta")
+```
+
+
+```{r}
+hist(iris$Sepal.Width,
+     main="Distribuição da largura das Sétalas",
+     xlab = "Largura das Sétalas",
+     ylab = "Frequência Absoluta")
+```
+
+
+```{r}
+boxplot(iris$Sepal.Width)
+```
+
+
+
+```{r}
+boxplot(iris$Petal.Length)
+```
+
+# Analise de Quartis
+
+```{r}
+summary(iris$Petal.Length)
+```
+
+```{r}
+IQR(iris$Petal.Length)
+```
+
+```{r}
+quantile(iris$Petal.Length, probs=0.75)
+```
+
+```{r}
+quantile(iris$Petal.Length, probs=0.25)
+```
+
+
+Analise do comprimento das pétalas por espécia
+```{r}
+boxplot(iris$Petal.Length ~ iris$Species,
+        main="Comprimento das Pétalas por Espécie",
+        xlab = "Espécia",
+        ylab = "Comprimento")
+```
+
+
+Analise do comprimento das sétalas por espécia
+```{r}
+boxplot(iris$Sepal.Length ~ iris$Species,
+        main="Comprimento das Sépalas por Espécie",
+        xlab = "Espécia",
+        ylab = "Comprimento")
+```
+
+
+```{r}
+boxplot(iris)
+```
+
+
+# Analise de Correlação
+```{r}
+plot(iris$Sepal.Length, iris$Petal.Length,
+     main="Dispersão entre Comprimento Sépala e Pétala")
+```
+# Cálculo da CorrelaÇão entre Comprimento da Sépala e Pétala
+```{r}
+cor(iris$Sepal.Length, iris$Petal.Length)
+```
+
+# Gráfico de Correlaçao
+```{r}
+pairs(iris[,1:4])
+```
+
+```{r}
+pairs(iris[,1:4], col=iris[,5])
+```
+
+
+# Analise de decisão basica
+```{r}
+#install.package(C50)
+library(C50)
+```
+
+
+```{r}
+entrada <- iris[,1:4]
+classificacao <- iris[,5]
+
+modelo <- C5.0(entrada, classificacao, control=C5.0Control(noGlobalPruning = TRUE, minCases = 1))
+```
+
+
+```{r}
+str(modelo)
+```
+
+```{r}
+plot(modelo)
+```
+
+
+```{r}
+modelo2 <- C5.0(entrada, classificacao, control=C5.0Control(noGlobalPruning = FALSE))
+```
+
+```{r}
+plot(modelo2,
+     main="Arvore de Decisão")
+```
+
+```{r}
+C5imp(modelo, metric = "usage")
+```
+
+
+
+```{r}
+C5imp(modelo2, metric = "usage")
+```
+
+
+# Inclusão de uma nova flor para predição ao modelo
+```{r}
+nova.flor <- data.frame("Sepal.Length"=1.5, 
+                        "Sepal.Width" = 2.6,
+                        "Petal.Length" = 3,
+                        "Petal.Width" = 5)
+nova.flor
+```
+
+
+# Predição da nova flor
+```{r}
+predicao <- predict(modelo2, nova.flor, type = "class")
+predicao
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
