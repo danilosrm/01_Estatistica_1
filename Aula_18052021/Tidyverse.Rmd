@@ -1,0 +1,133 @@
+---
+title: "TidyVerse"
+author: "Danilo Sanches"
+date: "17/05/2021"
+output: html_document
+---
+
+# Instalação do Tidyverse
+
+```{r}
+install.packages("tidyverse")
+```
+
+# Carregar Tidyverse
+```{r}
+library(tidyverse)
+```
+
+
+# Estudo do dplyr
+```{r}
+install.packages("nycflights13")
+library(nycflights13)
+```
+
+# Verificação do Data Frame
+```{r}
+flights
+```
+
+# Comando básico do R
+```{r}
+flights[flights$month == 1,]
+```
+
+# Usando seleção pelo dplyer para linha
+```{r}
+filter(flights, month == 1)
+
+```
+
+
+# Seleção por coluna
+```{r}
+select(flights, month, day)
+```
+
+
+# Comando mutate (para alterar, excluir ou incluir colunas)
+
+
+# Ordenação de um Data Frame
+```{r}
+arrange(flights, month)
+```
+
+
+
+# ggplot
+```{r}
+mpg
+```
+
+
+# ggplot gráfico
+Necessário passar os "geoms" para geração do gráfico
+Comando abaixo somente gera as coordenadas
+```{r}
+ggplot(mpg)
+```
+
+
+# Geração do gráfico ggplot com geoms
+
+```{r}
+ggplot(mpg) +
+  geom_point(aes(x = displ, y = hwy))
+```
+
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy, color=class))
+```
+
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy, color=class, size=3))
+```
+
+
+
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy, color=class)) +
+  geom_smooth(aes(x = displ, y = hwy))
+```
+
+# Usando Faceting
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy) )+
+  facet_wrap(~ class)
+```
+
+```{r}
+ggplot(mpg) + 
+  geom_boxplot(aes(hwy) )+
+  coord_flip() +
+  facet_wrap(~ class)
+```
+
+
+
+```{r}
+ggplot(mpg) + 
+  geom_boxplot(aes(hwy, group=class) )+
+  coord_flip() + 
+  theme(legend.position = "left")
+```
+
+
+
+
+
+
+
+
+
+
