@@ -1,0 +1,108 @@
+---
+title: "TesteTopico_1"
+author: "Danilo Sanches"
+date: "22/05/2021"
+output: html_document
+---
+
+# Carrega a libraby necessária para plotar gráficos.
+
+```{r}
+library(ggplot2)
+```
+
+
+# Exporta os dados para um data frame
+```{r}
+LungDisease <- read.csv('LungDisease.csv')
+```
+
+# Plota o gráfico dos dados originais
+```{r}
+ggplot(LungDisease, aes(y=PEFR,x=Exposure)) + geom_point()
+```
+
+
+# Gera o Coeficiênte de Coerencia entre as variáveis
+```{r}
+cor(LungDisease$Exposure,LungDisease$PEFR)
+```
+
+
+# Gera um modelo de Regressão Linear
+
+```{r}
+model <- lm(PEFR ~ Exposure, data= LungDisease)
+```
+
+
+# Plota um gráfico dos dados reais com o modelo
+
+```{r}
+ggplot(data=LungDisease, aes(y=PEFR, x= Exposure)) + 
+  geom_point() + geom_abline(slope = model$coefficients[2],intercept=model$coefficients[1]) +
+  geom_smooth()
+```
+
+
+# Resumo da variável "model"
+```{r}
+summary(model)
+```
+
+
+
+# Cria um novo data frame para predição de teste
+```{r}
+df <- data.frame(Exposure=15)
+```
+
+# Gera a predição com o data frame criada "df"
+```{r}
+```
+
+
+```{r}
+predict(model,df)
+```
+
+
+```{r}
+lm_poly <- lm(PEFR ~  poly(Exposure, 2) ,data=LungDisease)
+```
+
+```{r}
+house <- read.csv('data/house_sales.csv', sep = "")
+```
+
+```{r}
+house_lm <- lm(AdjSalePrice ~ SqFtTotLiving + Bedrooms,  
+               data=house, na.action=na.omit)
+```
+
+
+```{r}
+df_house <- data.frame(Bedrooms=10,SqFtTotLiving=7000)
+predict(house_lm,df_house)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
